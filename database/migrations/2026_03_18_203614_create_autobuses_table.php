@@ -13,8 +13,13 @@ return new class extends Migration
     {
         Schema::create('autobuses', function (Blueprint $table) {
             $table->id();
+            $table->string('modelo');
+            $table->string('marca');
+            $table->year('anio');
+            $table->integer('capacidad_pasajeros');
+            $table->enum('tipo_autobus', ['Urbano', 'Interurbano', 'Articulado']);
             $table->timestamps();
-        });
+        }); 
     }
 
     /**
