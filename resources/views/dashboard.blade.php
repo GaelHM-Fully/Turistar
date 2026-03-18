@@ -32,7 +32,7 @@
     <div class="card-body">
         <h4>Bienvenido al sistema Turistar</h4>
         <p class="mb-0">
-            Somo una empresa dedicada a ofrecer servicio de transporte de calidad y comodidad para tus viajes seguros 
+            Somos una empresa dedicada a ofrecer servicio de transporte de calidad y comodidad para tus viajes seguros 
         </p>
     </div>
 </div>
