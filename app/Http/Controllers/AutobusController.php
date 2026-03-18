@@ -2,63 +2,80 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Autobus;
 use Illuminate\Http\Request;
 
 class AutobusController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $autobuses = Autobus::orderBy('id', 'desc')->get();
+        return view('autobuses.index', compact('autobuses'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('autobuses.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'modelo' => 'required|string|max:100',
+            'marca' => 'required|string|max:100',
+            'anio' => 'required|integer|min:2000|max:2100',
+            'capacidad_pasajeros' => 'required|integer|min:1|max:200',
+            'tipo_autobus' => 'required|in:Urbano,Interurbano,Articulado',
+        ]);
+
+        Autobus::create([
+            'modelo' => $request->modelo,
+            'marca' => $request->marca,
+            'anio' => $request->anio,
+            'capacidad_pasajeros' => $request->capacidad_pasajeros,
+            'tipo_autobus' => $request->tipo_autobus,
+        ]);
+
+        return redirect()->route('autobuses.index')
+            ->with('success', 'Autobús registrado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit($id)
     {
-        //
+        $autobus = Autobus::findOrFail($id);
+        return view('autobuses.edit', compact('autobus'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $autobus = Autobus::findOrFail($id);
+
+        $request->validate([
+            'modelo' => 'required|string|max:100',
+            'marca' => 'required|string|max:100',
+            'anio' => 'required|integer|min:2000|max:2100',
+            'capacidad_pasajeros' => 'required|integer|min:1|max:200',
+            'tipo_autobus' => 'required|in:Urbano,Interurbano,Articulado',
+        ]);
+
+        $autobus->update([
+            'modelo' => $request->modelo,
+            'marca' => $request->marca,
+            'anio' => $request->anio,
+            'capacidad_pasajeros' => $request->capacidad_pasajeros,
+            'tipo_autobus' => $request->tipo_autobus,
+        ]);
+
+        return redirect()->route('autobuses.index')
+            ->with('success', 'Autobús actualizado correctamente.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $autobus = Autobus::findOrFail($id);
+        $autobus->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('autobuses.index')
+            ->with('success', 'Autobús eliminado correctamente.');
     }
 }

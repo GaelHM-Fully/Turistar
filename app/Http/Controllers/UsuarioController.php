@@ -2,63 +2,96 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $usuarios = Usuario::orderBy('id', 'desc')->get();
+        return view('usuarios.index', compact('usuarios'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('usuarios.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => 'required|string|max:100',
+            'edad' => 'required|integer|min:18|max:100',
+            'correo' => 'required|email|unique:usuarios,correo',
+            'telefono' => 'required|string|max:20',
+            'turno' => 'required|string',
+            'puesto' => 'required|string|max:100',
+            'contrasena' => 'required|string|min:6',
+            'rol' => 'required|in:admin,personal',
+        ]);
+
+        Usuario::create([
+            'nombre' => $request->nombre,
+            'edad' => $request->edad,
+            'correo' => $request->correo,
+            'telefono' => $request->telefono,
+            'turno' => $request->turno,
+            'puesto' => $request->puesto,
+            'contrasena' => Hash::make($request->contrasena),
+            'rol' => $request->rol,
+        ]);
+
+        return redirect()->route('usuarios.index')
+            ->with('success', 'Usuario registrado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit($id)
     {
-        //
+        $usuario = Usuario::findOrFail($id);
+        return view('usuarios.edit', compact('usuario'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $usuario = Usuario::findOrFail($id);
+
+        $request->validate([
+            'nombre' => 'required|string|max:100',
+            'edad' => 'required|integer|min:18|max:100',
+            'correo' => 'required|email|unique:usuarios,correo,' . $usuario->id,
+            'telefono' => 'required|string|max:20',
+            'turno' => 'required|string',
+            'puesto' => 'required|string|max:100',
+            'contrasena' => 'nullable|string|min:6',
+            'rol' => 'required|in:admin,personal',
+        ]);
+
+        $usuario->nombre = $request->nombre;
+        $usuario->edad = $request->edad;
+        $usuario->correo = $request->correo;
+        $usuario->telefono = $request->telefono;
+        $usuario->turno = $request->turno;
+        $usuario->puesto = $request->puesto;
+        $usuario->rol = $request->rol;
+
+        if ($request->filled('contrasena')) {
+            $usuario->contrasena = Hash::make($request->contrasena);
+        }
+
+        $usuario->save();
+
+        return redirect()->route('usuarios.index')
+            ->with('success', 'Usuario actualizado correctamente.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $usuario = Usuario::findOrFail($id);
+        $usuario->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('usuarios.index')
+            ->with('success', 'Usuario eliminado correctamente.');
     }
 }
