@@ -33,15 +33,22 @@
                     <input type="number" name="capacidad_pasajeros" class="form-control" value="{{ old('capacidad_pasajeros') }}" required>
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label">Tipo de autobús</label>
-                    <select name="tipo_autobus" class="form-select" required>
-                        <option value="">Selecciona</option>
-                        <option value="Urbano" {{ old('tipo_autobus') == 'Urbano' ? 'selected' : '' }}>Urbano</option>
-                        <option value="Interurbano" {{ old('tipo_autobus') == 'Interurbano' ? 'selected' : '' }}>Interurbano</option>
-                        <option value="Articulado" {{ old('tipo_autobus') == 'Articulado' ? 'selected' : '' }}>Articulado</option>
-                    </select>
-                </div>
+                @if(session('usuario_rol') === 'admin')
+                    <div class="col-md-6">
+                        <label class="form-label">Tipo de autobús</label>
+                        <select name="tipo_autobus" class="form-select" required>
+                            <option value="">Selecciona</option>
+                            <option value="Urbano" {{ old('tipo_autobus') == 'Urbano' ? 'selected' : '' }}>Urbano</option>
+                            <option value="Interurbano" {{ old('tipo_autobus') == 'Interurbano' ? 'selected' : '' }}>Interurbano</option>
+                            <option value="Articulado" {{ old('tipo_autobus') == 'Articulado' ? 'selected' : '' }}>Articulado</option>
+                        </select>
+                    </div>
+                @else
+                    <div class="col-md-6">
+                        <label class="form-label">Tipo de autobús</label>
+                        <input type="text" class="form-control" value="Urbano (asignado por defecto)" disabled>
+                    </div>
+                @endif
 
             </div>
 

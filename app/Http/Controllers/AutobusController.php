@@ -20,20 +20,29 @@ class AutobusController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $reglas = [
             'modelo' => 'required|string|max:100',
             'marca' => 'required|string|max:100',
             'anio' => 'required|integer|min:2000|max:2100',
             'capacidad_pasajeros' => 'required|integer|min:1|max:200',
-            'tipo_autobus' => 'required|in:Urbano,Interurbano,Articulado',
-        ]);
+        ];
+
+        if (session('usuario_rol') === 'admin') {
+            $reglas['tipo_autobus'] = 'required|in:Urbano,Interurbano,Articulado';
+        }
+
+        $request->validate($reglas);
+
+        $tipoAutobus = session('usuario_rol') === 'admin'
+            ? $request->tipo_autobus
+            : 'Urbano';
 
         Autobus::create([
             'modelo' => $request->modelo,
             'marca' => $request->marca,
             'anio' => $request->anio,
             'capacidad_pasajeros' => $request->capacidad_pasajeros,
-            'tipo_autobus' => $request->tipo_autobus,
+            'tipo_autobus' => $tipoAutobus,
         ]);
 
         return redirect()->route('autobuses.index')
@@ -50,21 +59,29 @@ class AutobusController extends Controller
     {
         $autobus = Autobus::findOrFail($id);
 
-        $request->validate([
+        $reglas = [
             'modelo' => 'required|string|max:100',
             'marca' => 'required|string|max:100',
             'anio' => 'required|integer|min:2000|max:2100',
             'capacidad_pasajeros' => 'required|integer|min:1|max:200',
-            'tipo_autobus' => 'required|in:Urbano,Interurbano,Articulado',
-        ]);
+        ];
 
-        $autobus->update([
-            'modelo' => $request->modelo,
-            'marca' => $request->marca,
-            'anio' => $request->anio,
-            'capacidad_pasajeros' => $request->capacidad_pasajeros,
-            'tipo_autobus' => $request->tipo_autobus,
-        ]);
+        if (session('usuario_rol') === 'admin') {
+            $reglas['tipo_autobus'] = 'required|in:Urbano,Interurbano,Articulado';
+        }
+
+        $request->validate($reglas);
+
+        $autobus->modelo = $request->modelo;
+        $autobus->marca = $request->marca;
+        $autobus->anio = $request->anio;
+        $autobus->capacidad_pasajeros = $request->capacidad_pasajeros;
+
+        if (session('usuario_rol') === 'admin') {
+            $autobus->tipo_autobus = $request->tipo_autobus;
+        }
+
+        $autobus->save();
 
         return redirect()->route('autobuses.index')
             ->with('success', 'Autobús actualizado correctamente.');
