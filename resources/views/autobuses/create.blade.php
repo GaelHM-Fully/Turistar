@@ -46,7 +46,7 @@
                 @else
                     <div class="col-md-6">
                         <label class="form-label">Tipo de autobús</label>
-                        <input type="text" class="form-control" value="Urbano (asignado por defecto)" disabled>
+                        <input type="text" class="form-control" value="Urbano" disabled>
                     </div>
                 @endif
 
