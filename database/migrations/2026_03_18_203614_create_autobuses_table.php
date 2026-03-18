@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('autobuses', function (Blueprint $table) {
@@ -17,14 +14,12 @@ return new class extends Migration
             $table->string('marca');
             $table->year('anio');
             $table->integer('capacidad_pasajeros');
-            $table->enum('tipo_autobus', ['Urbano', 'Interurbano', 'Articulado']);
+            $table->enum('tipo_autobus', ['Urbano', 'Interurbano', 'Articulado'])
+                  ->default('Urbano');
             $table->timestamps();
-        }); 
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('autobuses');
