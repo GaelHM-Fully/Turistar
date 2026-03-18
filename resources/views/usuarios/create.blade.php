@@ -2,71 +2,77 @@
 
 @section('content')
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Usuarios</h2>
-
-    <a href="{{ route('usuarios.create') }}" class="btn btn-success">
-        <i class="fa-solid fa-user-plus"></i> Nuevo Usuario
-    </a>
-</div>
+<h2 class="mb-4">Registrar Usuario</h2>
 
 @include('partials.alerts')
 
 <div class="card shadow-sm">
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover mb-0">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Edad</th>
-                        <th>Correo</th>
-                        <th>Teléfono</th>
-                        <th>Turno</th>
-                        <th>Puesto</th>
-                        <th>Rol</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($usuarios as $usuario)
-                        <tr>
-                            <td>{{ $usuario->id }}</td>
-                            <td>{{ $usuario->nombre }}</td>
-                            <td>{{ $usuario->edad }}</td>
-                            <td>{{ $usuario->correo }}</td>
-                            <td>{{ $usuario->telefono }}</td>
-                            <td>{{ $usuario->turno }}</td>
-                            <td>{{ $usuario->puesto }}</td>
-                            <td>
-                                <span class="badge {{ $usuario->rol == 'admin' ? 'bg-danger' : 'bg-secondary' }}">
-                                    {{ $usuario->rol }}
-                                </span>
-                            </td>
-                            <td>
-                                <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-warning btn-sm">
-                                    <i class="fa-solid fa-pen"></i>
-                                </a>
+    <div class="card-body">
+        <form action="{{ route('usuarios.store') }}" method="POST">
+            @csrf
 
-                                <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('¿Deseas eliminar este usuario?')">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="9" class="text-center">No hay usuarios registrados.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Edad</label>
+                    <input type="number" name="edad" class="form-control" value="{{ old('edad') }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Correo</label>
+                    <input type="email" name="correo" class="form-control" value="{{ old('correo') }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Teléfono</label>
+                    <input type="text" name="telefono" class="form-control" value="{{ old('telefono') }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Turno</label>
+                    <select name="turno" class="form-select" required>
+                        <option value="">Selecciona</option>
+                        <option value="Matutino" {{ old('turno') == 'Matutino' ? 'selected' : '' }}>Matutino</option>
+                        <option value="Vespertino" {{ old('turno') == 'Vespertino' ? 'selected' : '' }}>Vespertino</option>
+                        <option value="Nocturno" {{ old('turno') == 'Nocturno' ? 'selected' : '' }}>Nocturno</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Puesto</label>
+                    <input type="text" name="puesto" class="form-control" value="{{ old('puesto') }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" name="contrasena" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Rol</label>
+                    <select name="rol" class="form-select" required>
+                        <option value="personal" {{ old('rol') == 'personal' ? 'selected' : '' }}>Personal</option>
+                        <option value="admin" {{ old('rol') == 'admin' ? 'selected' : '' }}>Administrador</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-success">
+                    Guardar
+                </button>
+
+                <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">
+                    Volver
+                </a>
+            </div>
+        </form>
     </div>
 </div>
 
