@@ -44,21 +44,24 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label">Puesto</label>
-                    <input type="text" name="puesto" class="form-control" value="{{ old('puesto') }}" required>
-                </div>
-
-                <div class="col-md-6">
                     <label class="form-label">Contraseña</label>
                     <input type="password" name="contrasena" class="form-control" required>
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label">Rol</label>
-                    <select name="rol" class="form-select" required>
-                        <option value="personal" {{ old('rol') == 'personal' ? 'selected' : '' }}>Personal</option>
-                        <option value="admin" {{ old('rol') == 'admin' ? 'selected' : '' }}>Administrador</option>
-                    </select>
+                <div class="col-12">
+                    <div class="form-check mt-2">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="es_admin"
+                            id="es_admin"
+                            value="1"
+                            {{ old('es_admin') ? 'checked' : '' }}
+                        >
+                        <label class="form-check-label" for="es_admin">
+                            Registrar como administrador
+                        </label>
+                    </div>
                 </div>
 
             </div>

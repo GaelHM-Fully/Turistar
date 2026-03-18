@@ -2,13 +2,13 @@
 
 @section('content')
 
-<h2 class="mb-4">Registrar Usuario</h2>
+<h2 class="mb-4">Registro de Trabajador</h2>
 
 @include('partials.alerts')
 
 <div class="card shadow-sm">
     <div class="card-body">
-        <form action="{{ route('usuarios.store') }}" method="POST">
+        <form action="{{ route('registro.publico.store') }}" method="POST">
             @csrf
 
             <div class="row g-3">
@@ -44,40 +44,19 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label">Puesto</label>
-                    <input type="text" name="puesto" class="form-control" value="{{ old('puesto') }}" required>
-                </div>
-
-                <div class="col-md-6">
                     <label class="form-label">Contraseña</label>
                     <input type="password" name="contrasena" class="form-control" required>
-                </div>
-
-                <div class="col-12">
-                    <div class="form-check mt-2">
-                        <input
-                            class="form-check-input"
-                            type="checkbox"
-                            name="es_admin"
-                            id="es_admin"
-                            value="1"
-                            {{ old('es_admin') ? 'checked' : '' }}
-                        >
-                        <label class="form-check-label" for="es_admin">
-                            Registrar como administrador
-                        </label>
-                    </div>
                 </div>
 
             </div>
 
             <div class="mt-4">
                 <button type="submit" class="btn btn-success">
-                    Guardar
+                    Crear cuenta
                 </button>
 
-                <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">
-                    Volver
+                <a href="{{ route('login') }}" class="btn btn-secondary">
+                    Volver al login
                 </a>
             </div>
         </form>

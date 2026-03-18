@@ -38,6 +38,11 @@
                 </button>
             </form>
 
+            <div class="text-center mt-3">
+                ¿No tienes cuenta?
+                <a href="{{ route('registro.publico') }}">Registrarse como trabajador</a>
+            </div>
+
         </div>
     </div>
 </div>
